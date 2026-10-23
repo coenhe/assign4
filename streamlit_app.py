@@ -1,6 +1,9 @@
 # Import necessary packages (Make sure to also include in "requirements.txt" in this repository.)
 import streamlit as st
 import pandas as pd
+from datetime import datetime
+import time
+from zoneinfo import ZoneInfo
 
 # Print Title for the App
 st.title("Microsoft Stock Data Dashboard by Coen He")
@@ -28,18 +31,21 @@ with tabs[2]:
 
 # Tab 4: Volume Chart
 with tabs[3]:
-    st.subheader(f"Something New - Live Digital Clock EST")
-    from datetime import datetime
-    import time
-    from zoneinfo import ZoneInfo  # Available in Python 3.9+
-    import streamlit as st
-    eastern_tz = ZoneInfo("America/New_York")
-    clock_placeholder = st.empty()
-    while True:
-      now_eastern = datetime.now(eastern_tz)
-        current_time = now_eastern.strftime("%H:%M:%S")
-        current_date = now_eastern.strftime("%A, %B %d, %Y")
-    clock_placeholder.markdown(
+  st.subheader("Something New - Live Digital Clock EST")
+
+  # 1. Target the Eastern Time zone
+  eastern_tz = ZoneInfo("America/New_York")
+
+  # 2. Create an isolated placeholder inside this specific tab
+  clock_placeholder = st.empty()
+
+  # 3. Fetch and format the live Eastern time
+  now_eastern = datetime.now(eastern_tz)
+  current_time = now_eastern.strftime("%H:%M:%S")
+  current_date = now_eastern.strftime("%A, %B %d, %Y")
+
+  # 4. Render the styled clock
+  clock_placeholder.markdown(
       f"""
         <div style="font-size: 40px; font-weight: bold; text-align: center; padding: 20px; border: 2px solid #4CAF50; border-radius: 10px;">
             {current_time}
@@ -49,4 +55,6 @@ with tabs[3]:
       unsafe_allow_html=True,
   )
 
+  # 5. Pause for 1 second, then trigger a script refresh to tick the clock
   time.sleep(1)
+  st.rerun()
